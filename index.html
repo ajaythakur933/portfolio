@@ -6,75 +6,145 @@
     <title>Ajay Thakur - Portfolio</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom styles to enhance Tailwind, if needed */
-        html {
-            scroll-behavior: smooth;
+    <!-- Tailwind CSS config for dark mode -->
+    <script>
+        // Configure Tailwind CSS to use 'class' strategy for dark mode.
+        // This means the 'dark' class will be manually toggled on the <html> element.
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        // Define 'Inter' as the default font, falling back to sans-serif.
+                        // Ensure 'Inter' is loaded via a link tag or is a system font.
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
         }
+    </script>
+    <!-- Google Fonts - Inter for a clean modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Inter font family to the entire body */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f8f8; /* Light gray background */
-            color: #333;
+            /* Smooth transition for background and text color when toggling dark mode */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
+        /* Custom styles for section titles to create an underline effect */
         .section-title {
             position: relative;
             display: inline-block;
-            padding-bottom: 0.5rem;
+            padding-bottom: 0.5rem; /* Space for the underline */
             margin-bottom: 2rem;
-            font-size: 2.25rem; /* text-4xl */
-            font-weight: bold; /* font-bold */
-            color: #2c3e50; /* Darker title color */
+            font-size: 2.25rem; /* Equivalent to Tailwind's text-4xl */
+            font-weight: bold; /* Equivalent to Tailwind's font-bold */
+            color: #2c3e50; /* Darker title color for light mode */
         }
+
+        /* Underline pseudo-element for section titles */
         .section-title::after {
             content: '';
             position: absolute;
             left: 0;
             bottom: 0;
-            width: 70%;
+            width: 70%; /* Adjust underline width */
             height: 4px;
-            background-color: #3498db; /* Blue underline */
+            background-color: #3498db; /* Blue underline for light mode */
             border-radius: 2px;
+        }
+
+        /* Dark mode specific styles for section titles */
+        html.dark .section-title {
+            color: #e0e0e0; /* Lighter title color for dark mode */
+        }
+
+        /* Dark mode specific styles for section title underline */
+        html.dark .section-title::after {
+            background-color: #85d7ff; /* Lighter blue underline for dark mode */
         }
     </style>
 </head>
-<body class="antialiased">
+<!-- 
+    The 'dark' class will be added/removed from the <html> tag by JavaScript.
+    Tailwind's 'dark:' prefix will then apply the corresponding styles.
+    'bg-gray-50' is the light mode background, 'dark:bg-gray-900' is the dark mode background.
+    'text-gray-900' is the light mode text, 'dark:text-gray-100' is the dark mode text.
+    'antialiased' for smoother font rendering.
+    'transition-colors duration-300' provides a smooth transition when switching themes.
+-->
+<body class="antialiased bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
 
     <!-- Header/Navigation -->
-    <header class="bg-white shadow-md p-4 fixed w-full z-10 top-0">
+    <header class="bg-white shadow-md p-4 fixed w-full z-10 top-0 dark:bg-gray-800 dark:shadow-lg transition-colors duration-300">
         <nav class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-blue-600 rounded-md p-2">AJ</a>
+            <!-- Logo/Name -->
+            <a href="#" class="text-2xl font-bold text-blue-600 rounded-md p-2 dark:text-blue-400">AJ</a>
+            
+            <!-- Dark Mode Toggle Button -->
+            <!-- Placed here for easy access in the header -->
+            <button id="theme-toggle" type="button" 
+                    class="text-gray-500 dark:text-gray-400 
+                           hover:bg-gray-100 dark:hover:bg-gray-700 
+                           focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 
+                           rounded-full text-sm p-2.5 ml-auto mr-4 md:mr-0"> <!-- Adjust margin for desktop/mobile -->
+                <!-- Sun Icon (Initially visible in light mode, hidden in dark mode) -->
+                <svg id="theme-toggle-light-icon" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 10a4 4 0 11-8 0 4 4 0 018 0zm-.947 0.947l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 011.414-1.414zM20 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zm-15.172 3.828a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l-.707-.707a1 1 0 011.414 0zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4-4a1 1 0 01-1 1H4a1 1 0 110-2h1a1 1 0 011 1zm-2.828-5.172a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414z"></path>
+                </svg>
+                <!-- Moon Icon (Initially hidden in light mode, visible in dark mode) -->
+                <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                </svg>
+            </button>
+
+            <!-- Navigation Links -->
             <ul class="flex space-x-6">
-                <li><a href="#about" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300 rounded-md p-2">About</a></li>
-                <li><a href="#skills" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300 rounded-md p-2">Skills</a></li>
-                <li><a href="#projects" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300 rounded-md p-2">Projects</a></li>
-                <li><a href="#contact" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300 rounded-md p-2">Contact</a></li>
+                <li><a href="#about" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300 rounded-md p-2 dark:text-gray-300 dark:hover:text-blue-400">About</a></li>
+                <li><a href="#skills" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300 rounded-md p-2 dark:text-gray-300 dark:hover:text-blue-400">Skills</a></li>
+                <li><a href="#projects" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300 rounded-md p-2 dark:text-gray-300 dark:hover:text-blue-400">Projects</a></li>
+                <li><a href="#contact" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300 rounded-md p-2 dark:text-gray-300 dark:hover:text-blue-400">Contact</a></li>
+                <li><a href="Ajay_Thakur_Resume.pdf" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300 rounded-md p-2 dark:text-gray-300 dark:hover:text-blue-400" target="_blank">Resume</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="pt-20"> <!-- Padding top to account for fixed header -->
+    <main class="pt-20"> <!-- Padding top to account for fixed header height -->
 
         <!-- Hero Section -->
-        <section id="hero" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center min-h-[calc(100vh-80px)] p-6 md:p-10 text-center shadow-lg">
+        <section id="hero" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white 
+                                  flex flex-col items-center justify-center 
+                                  min-h-[calc(100vh-80px)] p-6 md:p-10 text-center shadow-lg">
             <div class="space-y-6">
-                <img src="avtar.jpg" alt="Your Avatar" class="w-36 h-36 rounded-full mx-auto border-4 border-white shadow-lg object-cover">
+                <!-- Avatar image, replace with a real image URL -->
+                <img src="avtar.jpg" 
+                     alt="Your Avatar" 
+                     class="w-36 h-36 rounded-full mx-auto border-4 border-white shadow-lg object-cover">
                 <h1 class="text-5xl font-extrabold leading-tight">Hi, I'm <span class="text-yellow-300">Ajay Thakur</span></h1>
                 <p class="text-xl md:text-2xl font-light max-w-2xl mx-auto">A passionate Web Developer focused on creating beautiful and functional web experiences.</p>
-                <a href="#projects" class="inline-block bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-bold hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-md">View My Work</a>
+                <a href="#projects" class="inline-block bg-white text-blue-600 px-8 py-3 
+                                          rounded-full text-lg font-bold hover:bg-gray-100 
+                                          transition duration-300 transform hover:scale-105 shadow-md">View My Work</a>
             </div>
         </section>
 
         <!-- About Me Section -->
-        <section id="about" class="py-16 bg-white shadow-md rounded-lg mx-auto max-w-6xl mt-8 p-6 md:p-10">
+        <section id="about" class="py-16 bg-white shadow-md rounded-lg mx-auto max-w-6xl mt-8 p-6 md:p-10 
+                                  dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300">
             <div class="container mx-auto">
                 <h2 class="section-title text-center mb-10">About Me</h2>
                 <div class="flex flex-col md:flex-row items-center md:space-x-8">
                     <div class="md:w-1/3 mb-6 md:mb-0">
-                        <img src="photo.jpg" alt="Your Photo" class="w-full h-auto rounded-lg shadow-lg object-cover">
+                        <!-- Replace with a real photo URL -->
+                        <img src="photo.jpg" 
+                             alt="Your Photo" 
+                             class="w-full h-auto rounded-lg shadow-lg object-cover">
                     </div>
-                    <div class="md:w-2/3 text-lg leading-relaxed text-gray-700">
+                    <div class="md:w-2/3 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
                         <p class="mb-4">
-                            Hello! I'm <strong class="text-blue-600">Ajay Thakur</strong>, a dedicated web developer with a keen eye for detail and a passion for crafting engaging user interfaces. I specialize in front-end development, bringing designs to life with clean, efficient, and responsive code.
+                            Hello! I'm <strong class="text-blue-600 dark:text-blue-400">Ajay Thakur</strong>, a dedicated web developer with a keen eye for detail and a passion for crafting engaging user interfaces. I specialize in front-end development, bringing designs to life with clean, efficient, and responsive code.
                         </p>
                         <p class="mb-4">
                             My journey in web development started with a fascination for how websites are built and how they interact with users. Since then, I've honed my skills in various technologies and frameworks, always eager to learn and adapt to new challenges.
@@ -88,140 +158,158 @@
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="py-16 bg-gray-50 shadow-md rounded-lg mx-auto max-w-6xl mt-8 p-6 md:p-10">
+        <section id="skills" class="py-16 bg-gray-100 shadow-md rounded-lg mx-auto max-w-6xl mt-8 p-6 md:p-10 
+                                  dark:bg-gray-800 transition-colors duration-300">
             <div class="container mx-auto">
                 <h2 class="section-title text-center mb-10">Skills</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-center">
-                    <!-- Example Skill Card -->
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                    <!-- Example Skill Card (add more as needed) -->
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 
+                                dark:bg-gray-700 dark:text-gray-200">
+                        <!-- Replace with actual icon URLs or SVG/emoji -->
                         <img src="html.png" alt="HTML Icon" class="mx-auto mb-4 w-16 h-16 object-contain">
-                        <h3 class="text-xl font-bold text-gray-800">HTML5</h3>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">HTML5</h3>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 
+                                dark:bg-gray-700 dark:text-gray-200">
                         <img src="css.svg" alt="CSS Icon" class="mx-auto mb-4 w-16 h-16 object-contain">
-                        <h3 class="text-xl font-bold text-gray-800">CSS3</h3>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">CSS3</h3>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 
+                                dark:bg-gray-700 dark:text-gray-200">
                         <img src="js.png" alt="JavaScript Icon" class="mx-auto mb-4 w-16 h-16 object-contain">
-                        <h3 class="text-xl font-bold text-gray-800">JavaScript</h3>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">JavaScript</h3>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 
+                                dark:bg-gray-700 dark:text-gray-200">
                         <img src="react.png" alt="React Icon" class="mx-auto mb-4 w-16 h-16 object-contain">
-                        <h3 class="text-xl font-bold text-gray-800">React</h3>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">React</h3>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 
+                                dark:bg-gray-700 dark:text-gray-200">
                         <img src="tailwind.png" alt="Tailwind CSS Icon" class="mx-auto mb-4 w-16 h-16 object-contain">
-                        <h3 class="text-xl font-bold text-gray-800">Tailwind CSS</h3>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Tailwind CSS</h3>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 
+                                dark:bg-gray-700 dark:text-gray-200">
                         <img src="nodejs.png" alt="Node.js Icon" class="mx-auto mb-4 w-16 h-16 object-contain">
-                        <h3 class="text-xl font-bold text-gray-800">Node.js</h3>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Node.js</h3>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 
+                                dark:bg-gray-700 dark:text-gray-200">
                         <img src="git.png" alt="Git Icon" class="mx-auto mb-4 w-16 h-16 object-contain">
-                        <h3 class="text-xl font-bold text-gray-800">Git</h3>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Git</h3>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 
+                                dark:bg-gray-700 dark:text-gray-200">
                         <img src="figma.png" alt="Figma Icon" class="mx-auto mb-4 w-16 h-16 object-contain">
-                        <h3 class="text-xl font-bold text-gray-800">Figma</h3>
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">Figma</h3>
                     </div>
-                    <!-- Add more skill cards as needed -->
                 </div>
             </div>
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="py-16 bg-white shadow-md rounded-lg mx-auto max-w-6xl mt-8 p-6 md:p-10">
+        <section id="projects" class="py-16 bg-white shadow-md rounded-lg mx-auto max-w-6xl mt-8 p-6 md:p-10 
+                                  dark:bg-gray-800 transition-colors duration-300">
             <div class="container mx-auto">
                 <h2 class="section-title text-center mb-10">My Projects</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Example Project Card 1 -->
-                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden border border-gray-200">
+                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden border border-gray-200 
+                                dark:bg-gray-700 dark:border-gray-600">
+                        <!-- Replace with actual project image URL -->
                         <img src="https://placehold.co/400x250/3498db/ffffff?text=Project+1" alt="Project 1 Image" class="w-full h-52 object-cover">
                         <div class="p-6">
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Project Title One</h3>
-                            <p class="text-gray-700 text-base mb-4">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 dark:text-gray-100">Project Title One</h3>
+                            <p class="text-gray-700 text-base mb-4 dark:text-gray-300">
                                 A brief description of the project, highlighting its purpose and the technologies used. This could be a responsive blog or an e-commerce platform.
                             </p>
                             <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="bg-blue-200 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">HTML</span>
-                                <span class="bg-green-200 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">CSS</span>
-                                <span class="bg-yellow-200 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">JavaScript</span>
+                                <span class="bg-blue-200 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-700 dark:text-blue-100">HTML</span>
+                                <span class="bg-green-200 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-green-700 dark:text-green-100">CSS</span>
+                                <span class="bg-yellow-200 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-yellow-700 dark:text-yellow-100">JavaScript</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition duration-300" target="_blank">View Live</a>
-                                <a href="#" class="text-gray-600 hover:text-gray-800 font-semibold text-sm transition duration-300" target="_blank">GitHub</a>
+                                <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition duration-300 dark:text-blue-400 dark:hover:text-blue-300" target="_blank">View Live</a>
+                                <a href="#" class="text-gray-600 hover:text-gray-800 font-semibold text-sm transition duration-300 dark:text-gray-400 dark:hover:text-gray-300" target="_blank">GitHub</a>
                             </div>
                         </div>
                     </div>
 
                     <!-- Example Project Card 2 -->
-                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden border border-gray-200">
+                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden border border-gray-200 
+                                dark:bg-gray-700 dark:border-gray-600">
                         <img src="https://placehold.co/400x250/2ecc71/ffffff?text=Project+2" alt="Project 2 Image" class="w-full h-52 object-cover">
                         <div class="p-6">
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Project Title Two</h3>
-                            <p class="text-gray-700 text-base mb-4">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 dark:text-gray-100">Project Title Two</h3>
+                            <p class="text-gray-700 text-base mb-4 dark:text-gray-300">
                                 This project involved building a dynamic single-page application using a modern JavaScript framework. It features real-time data updates.
                             </p>
                             <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="bg-red-200 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">React</span>
-                                <span class="bg-blue-200 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Tailwind CSS</span>
-                                <span class="bg-purple-200 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Firebase</span>
+                                <span class="bg-red-200 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-red-700 dark:text-red-100">React</span>
+                                <span class="bg-blue-200 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-blue-700 dark:text-blue-100">Tailwind CSS</span>
+                                <span class="bg-purple-200 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-purple-700 dark:text-purple-100">Firebase</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition duration-300" target="_blank">View Live</a>
-                                <a href="#" class="text-gray-600 hover:text-gray-800 font-semibold text-sm transition duration-300" target="_blank">GitHub</a>
+                                <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition duration-300 dark:text-blue-400 dark:hover:text-blue-300" target="_blank">View Live</a>
+                                <a href="#" class="text-gray-600 hover:text-gray-800 font-semibold text-sm transition duration-300 dark:text-gray-400 dark:hover:text-gray-300" target="_blank">GitHub</a>
                             </div>
                         </div>
                     </div>
 
                     <!-- Example Project Card 3 -->
-                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden border border-gray-200">
+                    <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden border border-gray-200 
+                                dark:bg-gray-700 dark:border-gray-600">
                         <img src="https://placehold.co/400x250/f1c40f/ffffff?text=Project+3" alt="Project 3 Image" class="w-full h-52 object-cover">
                         <div class="p-6">
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Project Title Three</h3>
-                            <p class="text-gray-700 text-base mb-4">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 dark:text-gray-100">Project Title Three</h3>
+                            <p class="text-gray-700 text-base mb-4 dark:text-gray-300">
                                 A backend API project developed with Node.js and Express, providing robust data management for a mobile application.
                             </p>
                             <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="bg-green-200 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Node.js</span>
-                                <span class="bg-orange-200 text-orange-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Express.js</span>
-                                <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">MongoDB</span>
+                                <span class="bg-green-200 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-green-700 dark:text-green-100">Node.js</span>
+                                <span class="bg-orange-200 text-orange-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-orange-700 dark:text-orange-100">Express.js</span>
+                                <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-100">MongoDB</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition duration-300" target="_blank">View Live</a>
-                                <a href="#" class="text-gray-600 hover:text-gray-800 font-semibold text-sm transition duration-300" target="_blank">GitHub</a>
+                                <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition duration-300 dark:text-blue-400 dark:hover:text-blue-300" target="_blank">View Live</a>
+                                <a href="#" class="text-gray-600 hover:text-gray-800 font-semibold text-sm transition duration-300 dark:text-gray-400 dark:hover:text-gray-300" target="_blank">GitHub</a>
                             </div>
                         </div>
                     </div>
-                    <!-- Add more project cards as needed -->
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-16 bg-gray-50 shadow-md rounded-lg mx-auto max-w-6xl mt-8 p-6 md:p-10">
+        <section id="contact" class="py-16 bg-gray-100 shadow-md rounded-lg mx-auto max-w-6xl mt-8 p-6 md:p-10 
+                                  dark:bg-gray-800 transition-colors duration-300">
             <div class="container mx-auto text-center">
                 <h2 class="section-title text-center mb-10">Contact Me</h2>
-                <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+                <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto dark:text-gray-300">
                     I'm always open to new opportunities and collaborations. Feel free to reach out to me via email or connect with me on social media.
                 </p>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-6">
-                    <a href="mailto:ajaythakur933@gmail.com" class="bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-700 transition duration-300 transform hover:scale-105 shadow-md flex items-center gap-2">
-                        <!-- Icon for Email -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 4v7a2 2 0 002 2h14a2 2 0 002-2v-7m-18 0l-4 4a2 2 0 000 2l4 4m16-10l4-4a2 2 0 000-2l-4-4"/>
+                    <a href="mailto:ajaythakur933@gmail.com" class="bg-blue-600 text-white px-8 py-4 rounded-full 
+                                                                    text-lg font-bold hover:bg-blue-700 transition duration-300 
+                                                                    transform hover:scale-105 shadow-md flex items-center gap-2">
+                        <!-- Email Icon (Lucide-react equivalent SVG) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="16" x="2" y="4" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                         </svg>
                         Email Me
                     </a>
-                    <a href="https://www.linkedin.com/in/ajay-thakur-74b40a16a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app " target="_blank" class="bg-gray-800 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-900 transition duration-300 transform hover:scale-105 shadow-md flex items-center gap-2">
-                        <!-- Icon for LinkedIn -->
+                    <a href="https://www.linkedin.com/in/ajay-thakur-74b40a16a" target="_blank" class="bg-gray-800 text-white px-8 py-4 rounded-full 
+                                                                    text-lg font-bold hover:bg-gray-900 transition duration-300 
+                                                                    transform hover:scale-105 shadow-md flex items-center gap-2">
+                        <!-- LinkedIn Icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                         </svg>
                         LinkedIn
                     </a>
-                    <!-- Add more social media links as needed -->
                 </div>
             </div>
         </section>
@@ -229,7 +317,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-8 rounded-t-lg shadow-inner">
+    <footer class="bg-gray-800 text-white py-8 mt-8 rounded-t-lg shadow-inner 
+                   dark:bg-gray-900 transition-colors duration-300">
         <div class="container mx-auto text-center text-sm">
             <p>&copy; 2025 AJAY THAKUR. All rights reserved.</p>
             <p class="mt-2">Built with <span class="text-red-500">&hearts;</span> and Tailwind CSS</p>
@@ -237,15 +326,57 @@
     </footer>
 
     <script>
-        // JavaScript for smooth scrolling (optional, but good for UX)
+        // JavaScript for smooth scrolling when clicking on navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+                e.preventDefault(); // Prevent default anchor click behavior
 
+                // Scroll to the target element smoothly
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
             });
+        });
+
+        // --- Dark Mode Toggle Logic ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.querySelector('html'); // Target the <html> element for dark class
+
+        // Function to set the theme
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark'); // Save preference to local storage
+            } else {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light'); // Save preference to local storage
+            }
+        }
+
+        // Check user's preferred theme on page load
+        // 1. Check local storage first (user's explicit choice)
+        // 2. If no explicit choice, check system preference (prefers-color-scheme)
+        // 3. Default to light if neither is set
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            // If theme is stored in localStorage, apply it
+            setTheme(currentTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // If no theme in localStorage but system prefers dark, apply dark
+            setTheme('dark');
+        } else {
+            // Default to light mode if no preference found
+            setTheme('light');
+        }
+
+        // Add event listener to the theme toggle button
+        themeToggleBtn.addEventListener('click', () => {
+            // Toggle the 'dark' class on the <html> element
+            if (htmlElement.classList.contains('dark')) {
+                setTheme('light'); // Switch to light mode
+            } else {
+                setTheme('dark'); // Switch to dark mode
+            }
         });
     </script>
 </body>
